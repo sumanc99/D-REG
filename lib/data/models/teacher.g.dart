@@ -27,28 +27,18 @@ const TeacherSchema = CollectionSchema(
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
-    r'firstName': PropertySchema(
-      id: 2,
-      name: r'firstName',
-      type: IsarType.string,
-    ),
-    r'lastName': PropertySchema(
-      id: 3,
-      name: r'lastName',
-      type: IsarType.string,
-    ),
     r'password': PropertySchema(
-      id: 4,
+      id: 2,
       name: r'password',
       type: IsarType.string,
     ),
     r'tId': PropertySchema(
-      id: 5,
+      id: 3,
       name: r'tId',
       type: IsarType.string,
     ),
     r'updatedAt': PropertySchema(
-      id: 6,
+      id: 4,
       name: r'updatedAt',
       type: IsarType.dateTime,
     )
@@ -69,32 +59,6 @@ const TeacherSchema = CollectionSchema(
           name: r'tId',
           type: IndexType.hash,
           caseSensitive: true,
-        )
-      ],
-    ),
-    r'firstName': IndexSchema(
-      id: -2537032818573098835,
-      name: r'firstName',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'firstName',
-          type: IndexType.hash,
-          caseSensitive: false,
-        )
-      ],
-    ),
-    r'lastName': IndexSchema(
-      id: 8422632250150515205,
-      name: r'lastName',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'lastName',
-          type: IndexType.hash,
-          caseSensitive: false,
         )
       ],
     ),
@@ -153,8 +117,6 @@ int _teacherEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.className.length * 3;
-  bytesCount += 3 + object.firstName.length * 3;
-  bytesCount += 3 + object.lastName.length * 3;
   bytesCount += 3 + object.password.length * 3;
   bytesCount += 3 + object.tId.length * 3;
   return bytesCount;
@@ -168,11 +130,9 @@ void _teacherSerialize(
 ) {
   writer.writeString(offsets[0], object.className);
   writer.writeDateTime(offsets[1], object.createdAt);
-  writer.writeString(offsets[2], object.firstName);
-  writer.writeString(offsets[3], object.lastName);
-  writer.writeString(offsets[4], object.password);
-  writer.writeString(offsets[5], object.tId);
-  writer.writeDateTime(offsets[6], object.updatedAt);
+  writer.writeString(offsets[2], object.password);
+  writer.writeString(offsets[3], object.tId);
+  writer.writeDateTime(offsets[4], object.updatedAt);
 }
 
 Teacher _teacherDeserialize(
@@ -184,11 +144,9 @@ Teacher _teacherDeserialize(
   final object = Teacher(
     className: reader.readString(offsets[0]),
     createdAt: reader.readDateTime(offsets[1]),
-    firstName: reader.readString(offsets[2]),
-    lastName: reader.readString(offsets[3]),
-    password: reader.readString(offsets[4]),
-    tId: reader.readString(offsets[5]),
-    updatedAt: reader.readDateTimeOrNull(offsets[6]),
+    password: reader.readString(offsets[2]),
+    tId: reader.readString(offsets[3]),
+    updatedAt: reader.readDateTimeOrNull(offsets[4]),
   );
   object.id = id;
   return object;
@@ -210,10 +168,6 @@ P _teacherDeserializeProp<P>(
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
-    case 5:
-      return (reader.readString(offset)) as P;
-    case 6:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -351,96 +305,6 @@ extension TeacherQueryWhere on QueryBuilder<Teacher, Teacher, QWhereClause> {
               indexName: r'tId',
               lower: [],
               upper: [tId],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterWhereClause> firstNameEqualTo(
-      String firstName) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'firstName',
-        value: [firstName],
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterWhereClause> firstNameNotEqualTo(
-      String firstName) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'firstName',
-              lower: [],
-              upper: [firstName],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'firstName',
-              lower: [firstName],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'firstName',
-              lower: [firstName],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'firstName',
-              lower: [],
-              upper: [firstName],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterWhereClause> lastNameEqualTo(
-      String lastName) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'lastName',
-        value: [lastName],
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterWhereClause> lastNameNotEqualTo(
-      String lastName) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'lastName',
-              lower: [],
-              upper: [lastName],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'lastName',
-              lower: [lastName],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'lastName',
-              lower: [lastName],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'lastName',
-              lower: [],
-              upper: [lastName],
               includeUpper: false,
             ));
       }
@@ -813,136 +677,6 @@ extension TeacherQueryFilter
     });
   }
 
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'firstName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'firstName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'firstName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'firstName',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'firstName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'firstName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'firstName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'firstName',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'firstName',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> firstNameIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'firstName',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<Teacher, Teacher, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -991,136 +725,6 @@ extension TeacherQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'lastName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'lastName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'lastName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'lastName',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'lastName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'lastName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'lastName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'lastName',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'lastName',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterFilterCondition> lastNameIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'lastName',
-        value: '',
       ));
     });
   }
@@ -1486,30 +1090,6 @@ extension TeacherQuerySortBy on QueryBuilder<Teacher, Teacher, QSortBy> {
     });
   }
 
-  QueryBuilder<Teacher, Teacher, QAfterSortBy> sortByFirstName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'firstName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterSortBy> sortByFirstNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'firstName', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterSortBy> sortByLastName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'lastName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterSortBy> sortByLastNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'lastName', Sort.desc);
-    });
-  }
-
   QueryBuilder<Teacher, Teacher, QAfterSortBy> sortByPassword() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'password', Sort.asc);
@@ -1573,18 +1153,6 @@ extension TeacherQuerySortThenBy
     });
   }
 
-  QueryBuilder<Teacher, Teacher, QAfterSortBy> thenByFirstName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'firstName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterSortBy> thenByFirstNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'firstName', Sort.desc);
-    });
-  }
-
   QueryBuilder<Teacher, Teacher, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1594,18 +1162,6 @@ extension TeacherQuerySortThenBy
   QueryBuilder<Teacher, Teacher, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterSortBy> thenByLastName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'lastName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QAfterSortBy> thenByLastNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'lastName', Sort.desc);
     });
   }
 
@@ -1661,20 +1217,6 @@ extension TeacherQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Teacher, Teacher, QDistinct> distinctByFirstName(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'firstName', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Teacher, Teacher, QDistinct> distinctByLastName(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'lastName', caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<Teacher, Teacher, QDistinct> distinctByPassword(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1713,18 +1255,6 @@ extension TeacherQueryProperty
   QueryBuilder<Teacher, DateTime, QQueryOperations> createdAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createdAt');
-    });
-  }
-
-  QueryBuilder<Teacher, String, QQueryOperations> firstNameProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'firstName');
-    });
-  }
-
-  QueryBuilder<Teacher, String, QQueryOperations> lastNameProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'lastName');
     });
   }
 

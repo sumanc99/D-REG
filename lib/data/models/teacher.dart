@@ -10,11 +10,11 @@ class Teacher{
   @Index()
   String tId;
 
-  @Index(caseSensitive: false)
-  String firstName;
+  // @Index(caseSensitive: false)
+  // String firstName;
   
-  @Index(caseSensitive: false)
-  String lastName;
+  // @Index(caseSensitive: false)
+  // String lastName;
 
   @Index(caseSensitive: false)
   String className;
@@ -30,9 +30,9 @@ class Teacher{
   Teacher({
     required this.tId,
 
-    required this.firstName,
+    // required this.firstName,
 
-    required this.lastName,
+    // required this.lastName,
 
     required this.className,
 

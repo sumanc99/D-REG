@@ -1,4 +1,5 @@
 import 'package:d_reg/data/db/isar_db_connection.dart';
+import 'package:d_reg/providers/providers.dart';
 import 'package:d_reg/theme/app_theme.dart';
 import 'package:d_reg/views/screens/login_screen.dart';
 import 'package:d_reg/views/screens/main_scaffold.dart';
@@ -6,6 +7,7 @@ import 'package:d_reg/views/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,10 +30,16 @@ void main() async{
   // check if teacher already registered
   final hasTeacher = await isarService.hasTeacher();
 
-  runApp(MyApp(
-    hasTeacher: hasTeacher,
-    isarService: isarService,
-  ));
+  runApp(
+    MultiProvider(
+      providers: providers(isarService),
+      child:  MyApp(
+        hasTeacher: hasTeacher,
+        isarService: isarService,
+        )
+      ),
+    );
+   
 }
 
 class MyApp extends StatelessWidget {
