@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:isar/isar.dart';
 import 'package:d_reg/data/models/teacher.dart';
 

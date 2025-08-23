@@ -8,7 +8,7 @@ class StudentRollCallScreen extends StatefulWidget {
   @override
   State<StudentRollCallScreen> createState() => _StudentRollCallScreenState();
 }
-
+ 
 class Student {
   final String name;
   final String avatarAsset;
